@@ -1,0 +1,17 @@
+{
+  "name": "trevorhreed.com",
+  "version": "2.0.0",
+  "description": "A personal website",
+  "type": "module",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app"
+  },
+  "dependencies": {
+    "ace": "file:pkg/ace"
+  },
+  "devDependencies": {
+    "mime-db": "^1.50.0",
+    "nodemon": "^2.0.14"
+  }
+}
