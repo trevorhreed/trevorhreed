@@ -1,0 +1,22 @@
+{
+  "name": "trevorhreed",
+  "version": "1.0.0",
+  "description": "A personal website",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "start": "npm run watch & npx live-server docs",
+    "build": "htmlc ./src/index.html ./docs/index.html",
+    "watch": "htmlc ./src/index.html ./docs/index.html watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/trevorhreed/trevorhreed.git"
+  },
+  "author": "Trevor Reed",
+  "bugs": {
+    "url": "https://github.com/trevorhreed/trevorhreed/issues"
+  },
+  "homepage": "https://github.com/trevorhreed/trevorhreed#readme"
+}
