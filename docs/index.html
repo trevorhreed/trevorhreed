@@ -1,8 +1,68 @@
 <!doctype html>
 <html>
   <head>
+    <style>
+      html,body{
+        padding: 0;
+        margin: 0;
+        font-size: 16px;
+        font-family: helvetica, arial, sans-serif;
+        height: 100%;
+      }
+      body{
+        display: flex;
+        flex-direction: column;
+      }
+      header{
+        display: flex;
+        flex-direction: row;
+      }
+      header h1{
+        flex: 1;
+      }
+      header nav button{
+        border: 0;
+        background: transparent;
+        padding: 1em 1.7em;
+      }
+      main{
+        flex: 1;
+        overflow: auto;
+      }
+      footer{
+        text-align: center;
+        padding: 2rem;
+        font-size: 70%;
+      }
+    </style>
   </head>
   <body>
-    <h1>Trevor Reed</h1>
+    <header>
+      <h1 id="about-link">Trevor Reed</h1>
+      <nav>
+        <button id="tech-link">Tech</button>
+        <button id="projects-link">Projects</button>
+        <button id="contact-link">Contact</button>
+        <button id="blog-link">Blog</button>
+      </nav>
+    </header>
+    <main>
+      <section id="about-content">
+        
+      </section>
+      <section id="tech-content">
+        
+      </section>
+      <section id="projects-content">
+        
+      </section>
+      <section id="contact-content">
+        
+      </section>
+      <section id="blog-content">
+        
+      </section>
+    </main>
+    <footer>&#9426; 2022 Trevor Reed</footer>
   </body>
 </html>
