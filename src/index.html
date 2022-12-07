@@ -2,5 +2,101 @@
 <html>
   <head>
     <title>Trevor Reed</title>
+    <meta charset="utf-8" />
+    <meta name="description" content="Trevor Reed's personal website" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="styles.scss">
   </head>
+  <body>
+    <header>
+      <h1 link="about">Trevor Reed</h1>
+      <span flex></span>
+      <div id="menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <nav id="big-nav">
+        <button link="tech">Tech</button>
+        <button link="projects">Projects</button>
+        <button link="services">Services</button>
+        <button link="contact">Contact</button>
+        <button link="blog">Blog</button>
+      </nav>
+    </header>
+    <nav id="small-nav">
+      <button link="tech">Tech</button>
+      <button link="projects">Projects</button>
+      <button link="services">Services</button>
+      <button link="contact">Contact</button>
+      <button link="blog">Blog</button>
+    </nav>
+    <main>
+      <section id="about" class="active">
+        <h2>About</h2>
+        <img src="profile_200.jpg" inline alt="Trevor Reed Profile">
+        <p>
+          <i>
+            Interested in developing innovative software,
+            working with passionate people, and making the
+            world a better place.
+          </i>
+        </p>
+        <p>
+          I've been programming since the late 90's; I love
+          any challenging problem, but I'm particularly
+          interested in web development, cloud computing,
+          and software development processes. I have a passion
+          for improving the way things get done.
+        </p>
+        <p>
+          Outside of work, I enjoy spending time with family
+          and friends, watching movies, playing games, tennis,
+          floorball, hiking, reading, stimulating conversation,
+          and good food.
+        </p>
+      </section>
+      <section id="tech">
+        <h2>Tech</h2>
+        <ul hide>
+          <li>JavaScript, TypeScript, C#, Java, Python, PHP, Go, Rust</li>
+          <li>HTML5, CSS/Sass/Less</li>
+          <li>NodeJS, Express, Koa.js, Angular, Vue.js, React</li>
+          <li>SQL (Postgres, MySQL, MSSQL), Firebase/Firestore</li>
+          <li>Google Cloud Platform: App Engine, Cloud Functions, Cloud Run, Firestore, Firebase Auth, Cloud Storage, PubSub, Cloud Scheduler, Cloud Build, BigQuery</li>
+          <li>AWS: EC3, RDS, S3, Lambda, API Gateway, DynamoDB, CloudWatch, SSM, </li>
+          <li>REST, Microservices, Data Modeling</li>
+          <p>
+            JavaScript, .Net/C#, Java, Python, PHP, NodeJS, HTML5, CSS/Sass/Less,
+            Angular, Vue, SQL, NoSQL, full-stack developer, git, Google App Engine,
+            Amazon Web Services, PaaS, SaaS, IaaS, FaaS, serverless, microservices,
+            MVC, REST, CI/CD, Data Modeling, DevOps, Load Balancing, CDN, caching,
+            project management, process management, Agile, Scrum, Kanban,
+            JIRA administration, unit testing, E2E testing, regression testing, etc.
+          </p>
+        </ul>
+      </section>
+      <section id="projects">
+        <h2>Projects & Industries</h2>
+        <ul hide>
+          <li>Content Management Systems</li>
+          <li>Call Center Software</li>
+          <li>Broadcasting Services</li>
+          <li>E-Commerce</li>
+          <li>Logistics</li>
+        </ul>
+      </section>
+      <section id="services">
+        <h2>Services</h2>
+      </section>
+      <section id="contact">
+        <h2>Contact</h2>
+      </section>
+      <section id="blog">
+        <h2>Blog</h2>
+      </section>
+    </main>
+    <footer>&#9426; <span id="year"></span> Trevor Reed</footer>
+    <script src="script.js"></script>
+  </body>
 </html>

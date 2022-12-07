@@ -6,9 +6,10 @@
     "doc": "docs"
   },
   "scripts": {
-    "start": "npm run watch & npx live-server docs",
-    "build": "htmlc ./src/index.html ./docs/index.html",
-    "watch": "htmlc ./src/index.html ./docs/index.html watch"
+    "start": "npm run watch & npm run serve",
+    "serve": "npx serve docs -l 3000",
+    "build": "npx @yesiree/htmlc@latest -s src -d docs",
+    "watch": "npx @yesiree/htmlc@latest -s src -d docs -w"
   },
   "repository": {
     "type": "git",
