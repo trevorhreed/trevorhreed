@@ -45,9 +45,7 @@ p{
 }
 img{
   border-radius: .2em;
-  &:hover{
-    box-shadow: 0 0 3px 3px #0003;
-  }
+  box-shadow: 0 0 3px 3px #0003;
   &:nth-of-type(2n+1){
     float: right;
     margin: 0 0 2em 2em;
