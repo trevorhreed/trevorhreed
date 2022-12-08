@@ -31,13 +31,13 @@ document.addEventListener('DOMContentLoaded', e => {
   const defaultSection = $('main').dataset.defaultSection
 
 
-  const goToSection = url => {
+  const goTo = link => {
     $menu.classList.remove('active')
     $nav.classList.remove('active')
     $sections.forEach($section => {
       const isDefault = $section.getAttribute('id') === defaultSection
       const id = $section.getAttribute('id')
-      $section.classList.toggle('active', id === url || (url === '' && isDefault))
+      $section.classList.toggle('active', id === link || (link === '' && isDefault))
     })
   }
 
@@ -45,15 +45,15 @@ document.addEventListener('DOMContentLoaded', e => {
     $el.addEventListener('click', e => {
       e.preventDefault()
       const link = $el.getAttribute('link')
-      const url = link ? `#${link}` : ''
+      const url = link ? `#${link}` : '/'
       history.pushState(null, null, url)
-      goToSection(url)
+      goTo(link)
     })
   })
 
   if (window.location.hash) {
     const url = window.location.hash.slice(1)
-    goToSection(url)
+    goTo(url)
   }
 
 })
