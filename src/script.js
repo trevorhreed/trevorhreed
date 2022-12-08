@@ -43,8 +43,9 @@ document.addEventListener('DOMContentLoaded', e => {
   $links.forEach($el => {
     $el.addEventListener('click', e => {
       e.preventDefault()
-      history.pushState(null, null, `#${$el.getAttribute('link')}`)
-      const url = $el.getAttribute('link')
+      const link = $el.getAttribute('link')
+      const url = link ? `#${link}` : ''
+      history.pushState(null, null, url)
       goToSection(url)
     })
   })
