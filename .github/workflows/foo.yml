@@ -1,5 +1,5 @@
-name: release
-run-name: Release
+name: foo
+run-name: Foo
 
 on:
   push:
