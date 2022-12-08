@@ -27,8 +27,9 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18
+
       - name: Build artifact
-      - run: npm run build
+        run: npm run build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
