@@ -34,8 +34,9 @@ document.addEventListener('DOMContentLoaded', e => {
     $menu.classList.remove('active')
     $nav.classList.remove('active')
     $sections.forEach($section => {
+      const isDefault = $section.getAttribute('id') === 'about'
       const id = $section.getAttribute('id')
-      $section.classList.toggle('active', id === url)
+      $section.classList.toggle('active', id === url || (url === '' && isDefault))
     })
   }
 

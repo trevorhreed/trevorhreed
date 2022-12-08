@@ -45,14 +45,17 @@ p{
 }
 img{
   border-radius: .2em;
-}
-img:nth-of-type(2n+1){
-  float: right;
-  margin: 0 0 2em 2em;
-}
-img:nth-of-type(2n){
-  float: left;
-  margin: 0 2em 2em 0;
+  &:hover{
+    box-shadow: 0 0 3px 3px #0003;
+  }
+  &:nth-of-type(2n+1){
+    float: right;
+    margin: 0 0 2em 2em;
+  }
+  &:nth-of-type(2n){
+    float: left;
+    margin: 0 2em 2em 0;
+  }
 }
 header,main,footer{
   padding-top: 1rem;
@@ -175,11 +178,13 @@ main{
   }
 }
 footer{
+  position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
+  padding: 0.4em 1em;
+  background: #4444;
+  backdrop-filter: blur(10px);
   text-align: center;
   font-size: 70%;
-  padding-top: 6rem;
-  padding-bottom: 3rem;
 }
