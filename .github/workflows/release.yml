@@ -28,8 +28,8 @@ jobs:
         with:
           node-version: 18
 
-      - name: Build artifact
-        run: npm run build
+      # - name: Build artifact
+      - run: npm run build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
