@@ -1,5 +1,5 @@
-name: main
-run-name: Main — Release
+name: release
+run-name: Release
 
 on:
   push:
