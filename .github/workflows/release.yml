@@ -3,9 +3,9 @@ run-name: Release
 
 on:
   push:
-    branches: [$default-branch]
+    branches: ['release']
   pull_request:
-    branches: [$default-branch]
+    branches: ['release']
   workflow_dispatch:
 
 permissions:
