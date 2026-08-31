@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Welcome</title>
+    <script>
+      const data = [
+        {
+          label: 'Common',
+          links: [
+            {
+              label: 'Scriptures',
+              url: 'https://www.churchofjesuschrist.org/study/scriptures?lang=eng',
+            },
+            {
+              label: 'Drive',
+              url: 'https://drive.google.com/drive/u/0/my-drive',
+            },
+            {
+              label: 'Donations',
+              url: 'https://donations.churchofjesuschrist.org/donations/donation',
+            },
+            {
+              label: 'Edinburgh',
+              url: 'http://www.myed.ed.ac.uk/',
+            },
+          ],
+        },
+        {
+          label: 'Misc.',
+          links: [
+            {
+              label: 'Edit Links',
+              url: 'https://github.com/trevorhreed/trevorhreed/edit/release/src/tabs/me/index.html'
+            },
+            {
+              label: 'HOA Portal',
+              url: 'https://portal.amres.co/',
+            },
+          ],
+        },
+      ]
+    </script>
+    <style>
+      :root {
+        /* --image: url('RANDOMLY GENERATED'); */
+        --background: #3338;
+        --text: #ccc;
+        --text-hover: #ccc3;
+        --panel-background: #000c;
+        --font-size: 20px;
+      }
+      html,
+      body {
+        box-sizing: border-box;
+        font-family: Helvetica, sans-serif;
+        font-size: var(--font-size);
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+
+      body {
+        background: var(--background);
+        background-image: var(--image);
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        color: var(--text);
+      }
+
+      a.link {
+        display: inline-block;
+        color: var(--text);
+        text-decoration: none;
+        padding: 0.5rem 1rem 0.5rem;
+        border-radius: 0.5rem;
+        transition: background-color 0.3s, color 0.3s;
+
+        &:hover {
+          color: var(--text-hover);
+          background-color: var(--text-hover);
+        }
+      }
+
+      .panel {
+        background: var(--panel-background);
+        /* box-shadow: 0 0 1em #000; */
+        border-radius: 1em;
+        padding: 1rem;
+        max-height: 100%;
+        overflow: auto;
+      }
+
+      .link-groups {
+        display: inline-block;
+        overflow: auto;
+        max-height: 100%;
+        box-sizing: border-box;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        border-bottom-left-radius: 0;
+
+        & .group {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          margin: 0 0 1.8rem;
+
+          & label {
+            opacity: 0.6;
+            display: inline;
+            padding: 0.5rem 1rem;
+            color: var(--text);
+            border-top-left-radius: 0.5rem;
+            border-top-right-radius: 0.5rem;
+          }
+
+          & .links {
+            display: flex;
+            flex-direction: row;
+            gap: 0.5rem;
+            border-top-right-radius: 0.5rem;
+            border-bottom-left-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem;
+
+            & a {
+              display: inline-block;
+              color: var(--text);
+              text-decoration: none;
+              cursor: pointer;
+            }
+          }
+
+          &:last-child {
+            margin: 0 0 0.5rem;
+          }
+        }
+      }
+
+      .clock {
+        position: fixed;
+        bottom: 0rem;
+        right: 0rem;
+        border-top-right-radius: 0;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+
+        & span {
+          font-size: 3rem;
+        }
+      }
+    </style>
+  </head>
+  <body
+    v-scope
+    @vue:mounted="mounted">
+    <section class="link-groups panel">
+      <div
+        v-for="(group, groupIndex) in groups"
+        :key="groupIndex"
+        class="group">
+        <label>{{ group.label }}</label>
+        <div class="links">
+          <a
+            v-for="(link, linkIndex) in group.links"
+            :key="linkIndex"
+            class="link"
+            :href="link.url">
+            {{ link.label }}
+          </a>
+        </div>
+      </div>
+    </section>
+    <section class="clock panel"><span>{{ time }}</span></section>
+    <script type="module">
+      import { createApp } from 'https://unpkg.com/petite-vue?module'
+
+      const MAX_IMAGE_INDEX = 64
+
+      const getSeason = () => {
+        // jan = 100% winter
+        // feb = 80% winter, 20% spring
+        // mar = 20% winter, 80% spring
+        // apr = 100% spring
+        // may = 80% spring, 20% summer
+        // jun = 20% spring, 80% summer
+        // jul = 100% summer
+        // aug = 80% summer, 20% fall
+        // sep = 20% summer, 80% fall
+        // oct = 100% fall
+        // nov = 80% fall, 20% winter
+        // dec = 20% fall, 80% winter
+        const month = new Date().getMonth() + 1
+        if (month === 1) return 'winter'
+        if (month === 2) return Math.random() < 0.8 ? 'winter' : 'spring'
+        if (month === 3) return Math.random() < 0.2 ? 'winter' : 'spring'
+        if (month === 4) return 'spring'
+        if (month === 5) return Math.random() < 0.8 ? 'spring' : 'summer'
+        if (month === 6) return Math.random() < 0.2 ? 'spring' : 'summer'
+        if (month === 7) return 'summer'
+        if (month === 8) return Math.random() < 0.8 ? 'summer' : 'autumn'
+        if (month === 9) return Math.random() < 0.2 ? 'summer' : 'autumn'
+        if (month === 10) return 'autumn'
+        if (month === 11) return Math.random() < 0.8 ? 'autumn' : 'winter'
+        if (month === 12) return Math.random() < 0.2 ? 'autumn' : 'winter'
+        alert('Invalid month')
+      }
+
+      const getBackgroundImage = () => {
+        const randomIndex = Math.floor(Math.random() * MAX_IMAGE_INDEX) + 1
+        const randomCategory = getSeason()
+        return `../images/${randomCategory}/img_${('' + randomIndex).padStart(2, '0')}.jpg`
+      }
+
+      const setBackgroundImage = imageUrl => {
+        document.documentElement.style.setProperty('--image', `url(${imageUrl})`)
+      }
+
+      const toHexPart = value => value.toString(16).padStart(2, '0')
+
+      const rgbToHex = ({ red, green, blue }) => `#${toHexPart(red)}${toHexPart(green)}${toHexPart(blue)}`
+
+      const lightenColor = ({ red, green, blue }, factor) => ({
+        red: Math.min(255, Math.round(red + (255 - red) * factor)),
+        green: Math.min(255, Math.round(green + (255 - green) * factor)),
+        blue: Math.min(255, Math.round(blue + (255 - blue) * factor)),
+      })
+
+      const darkenColor = ({ red, green, blue }, factor) => ({
+        red: Math.max(0, Math.round(red * (1 - factor))),
+        green: Math.max(0, Math.round(green * (1 - factor))),
+        blue: Math.max(0, Math.round(blue * (1 - factor))),
+      })
+
+      const getColorsFromImage = async imageUrl => {
+        return new Promise(resolve => {
+          const img = new Image()
+          img.crossOrigin = 'Anonymous'
+          img.onload = () => {
+            const canvas = document.createElement('canvas')
+            const ctx = canvas.getContext('2d')
+            canvas.width = img.width
+            canvas.height = img.height
+            ctx.drawImage(img, 0, 0)
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+            const data = imageData.data
+            const color = { red: 0, green: 0, blue: 0 }
+            for (let i = 0; i < data.length; i += 4) {
+              color.red += data[i]
+              color.green += data[i + 1]
+              color.blue += data[i + 2]
+            }
+
+            const pixelCount = data.length / 4
+            const rgb = {
+              red: Math.round(color.red / pixelCount),
+              green: Math.round(color.green / pixelCount),
+              blue: Math.round(color.blue / pixelCount),
+            }
+
+            resolve({
+              light: rgbToHex(lightenColor(rgb, 0.4)),
+              dark: rgbToHex(darkenColor(rgb, 0.6)),
+            })
+          }
+          img.src = imageUrl
+        })
+      }
+
+      const setTextColor = (color, property) => {
+        document.documentElement.style.setProperty(property, color)
+      }
+
+      const daysOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+      const getFormattedTime = () => {
+        const now = new Date()
+        const dayOfTheWeek = daysOfTheWeek[now.getDay()]
+        const month = months[now.getMonth()]
+        const dayOfTheMonth = now.getDate()
+        const hours = now.getHours()
+        const minutes = now.getMinutes()
+        const seconds = now.getSeconds()
+        const formattedHours = hours < 10 ? `0${hours}` : hours
+        const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes
+        const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds
+        return `${dayOfTheWeek} ${month} ${dayOfTheMonth} • ${formattedHours}:${formattedMinutes}:${formattedSeconds}`
+      }
+
+      createApp({
+        time: getFormattedTime(),
+        groups: data
+          .map(group => {
+            group.links = group.links.filter(link => !link.hide)
+            return group
+          })
+          .filter(group => !group.hide && group?.links?.length),
+        async mounted() {
+          const imageUrl = getBackgroundImage()
+          setBackgroundImage(imageUrl)
+          const color = await getColorsFromImage(imageUrl)
+          console.dir({ color })
+          setTextColor(color.light, '--text')
+          setTextColor(color.dark + 'dd', '--panel-background')
+          setInterval(() => (this.time = getFormattedTime()), 100)
+        },
+      }).mount()
+    </script>
+  </body>
+</html>

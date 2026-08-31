@@ -1,0 +1,6 @@
+{
+  "name": "movie-directory",
+  "version": "1.0.0",
+  "description": "A directory of movies",
+  "type": "module"
+}

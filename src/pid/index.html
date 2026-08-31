@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+  <head>
+    <title>PID Generator</title>
+    <style>
+      
+    </style>
+  </head>
+  <body>
+    <h1>Generate PIDs</h1>
+    <input type="number" id="count" value="1" />
+    <button id="generate">Generate</button>
+    <pre><code id="pid"></code></pre>
+    <pre><code id="code">
+const createPid = () => {
+  const digits = 'abcdefghjkmnpqrstuvwxyz23456789';
+  const uuid = crypto.randomUUID().replace(/-/g, '');
+  let num = BigInt('0x' + uuid);
+  let result = '';
+  while (num > 0n) {
+    result = digits[num % 31n] + result;
+    num /= 31n;
+  }
+  return result.padStart(26, digits[0]);
+}
+    </code></pre>
+    <script>
+      const createPid = () => {
+        const digits = 'abcdefghjkmnpqrstuvwxyz23456789';
+        const uuid = crypto.randomUUID().replace(/-/g, '');
+        let num = BigInt('0x' + uuid);
+        let result = '';
+        while (num > 0n) {
+          result = digits[num % 31n] + result;
+          num /= 31n;
+        }
+        return result.padStart(26, digits[0]);
+      }
+      
+      const getRange = count => Array.from({ length: count }, (_, index) => index + 1);
+      const count = document.querySelector('#count')
+      const generate = document.querySelector('#generate')
+      const pid = document.querySelector('#pid')
+
+      generate.addEventListener('click', e => {
+        pid.innerHTML = getRange(parseInt(count.value))
+          .map(() => createPid())
+          .join('<br/>')
+      })
+
+      generate.click()
+    </script>
+  </body>
+</html>

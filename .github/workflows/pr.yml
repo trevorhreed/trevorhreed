@@ -1,0 +1,29 @@
+name: pr
+run-name: Pull Request
+
+on:
+  pull_request:
+    branches: ['release']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+#  pages: write
+#  id-token: write
+
+#concurrency:
+#  group: "pages"
+#  cancel-in-progress: false
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.1.7
+      - uses: actions/setup-node@v4.0.3
+        with:
+          node-version-file: package.json
+
+      - name: Build artifact
+        run: npm run build

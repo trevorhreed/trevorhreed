@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1" />
+    <title>Movie Search</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        font-size: 16px;
+        background: #222;
+        color: #eee;
+        color-scheme: dark;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+
+      input {
+        font-size: 1em;
+        padding: 1em;
+        border: none;
+        border-radius: 0.5em;
+      }
+
+      .search {
+        background: #111;
+        padding: 1.3em;
+        display: flex;
+        flex-direction: column;
+
+        & .text {
+          display: flex;
+          flex-direction: column;
+        }
+
+        & .attrs {
+          margin-top: 1em;
+          display: flex;
+          gap: 0.8em;
+          flex-wrap: wrap;
+
+          & > div {
+            display: flex;
+            gap: 0.8em;
+            overflow-x: auto;
+
+            & button {
+              background: #333;
+              border: none;
+              border-radius: 0.5em;
+              padding: 0.5em 1em;
+              color: #eee;
+              cursor: pointer;
+            }
+
+            & button.active {
+              background: #eee;
+              color: #111;
+            }
+          }
+        }
+      }
+
+      main {
+        overflow: auto;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        padding: 1em;
+        flex-grow: 1;
+
+        & .movie {
+          display: inline-block;
+          min-width: 240px;
+          max-width: 10vw;
+          margin: 1em;
+          vertical-align: top;
+
+          & .link {
+            color: inherit;
+            text-decoration: none;
+          }
+
+          & .image {
+            width: 100%;
+            border-radius: 0.5em;
+            aspect-ratio: 2 / 3;
+            object-fit: cover;
+            background: #444;
+          }
+
+          & .title {
+            font-weight: bold;
+            margin-top: 0.5em;
+            font-size: 1.2em;
+          }
+
+          & .details {
+            font-size: 0.8em;
+            color: #ccc;
+            margin-top: 0.3em;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.3em;
+
+            & .flex {
+              flex-grow: 1;
+            }
+          }
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="search">
+      <div class="text">
+        <input
+          id="search-text-input"
+          placeholder="Search..."
+          autocomplete="off" />
+      </div>
+      <div class="attrs">
+        <div id="ratings">
+          <button
+            class="clear-attrs"
+            data-type="ratings">
+            Clear
+          </button>
+        </div>
+        <div id="tags">
+          <button
+            class="clear-attrs"
+            data-type="tags">
+            Clear
+          </button>
+        </div>
+      </div>
+    </header>
+    <main class="movies"></main>
+
+    <template id="movie-template">
+      <div class="movie">
+        <a
+          class="link"
+          target="_blank"
+          rel="noopener noreferrer">
+          <img class="image" />
+          <div class="title"></div>
+          <div class="details">
+            <span class="year"></span>
+            <span class="genre"></span>
+            <span class="flex"></span>
+            <span class="rating"></span>
+          </div>
+        </a>
+      </div>
+    </template>
+
+    <script type="module">
+      const movies = (await fetch('movies.json').then(res => res.json())).toSorted((a, b) => a.sortTitle.localeCompare(b.sortTitle))
+      const ratings = new Set(
+        movies
+          .map(movie => movie.rating)
+          .filter(Boolean)
+          .toSorted(),
+      )
+      const tags = new Set(
+        movies
+          .flatMap(movie => movie.tags)
+          .filter(Boolean)
+          .toSorted(),
+      )
+
+      const queryInput = {
+        text: '',
+        years: { start: null, end: null },
+        ratings: [],
+        tags: [],
+      }
+
+      const movieTemplate = document.getElementById('movie-template')
+      const movieContainer = document.querySelector('.movies')
+      const searchInput = document.getElementById('search-text-input')
+      const ratingsContainer = document.getElementById('ratings')
+      const tagsContainer = document.getElementById('tags')
+      const clearButtons = document.querySelectorAll('.clear-attrs')
+
+      const query = ({ text, years, ratings, tags }) => {
+        const yearStart = typeof years === 'number' ? years : years.start
+        const yearEnd = typeof years === 'number' ? years : years.end
+        ratings = Array.isArray(ratings) ? ratings : [ratings].filter(Boolean)
+        tags = Array.isArray(tags) ? tags : [tags].filter(Boolean)
+
+        return movies
+          .filter(movie => !text || movie.searchTitle.includes(text))
+          .filter(movie => !yearStart || movie.year >= yearStart)
+          .filter(movie => !yearEnd || movie.year <= yearEnd)
+          .filter(movie => !ratings.length || ratings.includes(movie.rating))
+          .filter(movie => !tags.length || tags.some(tag => movie.tags.includes(tag)))
+      }
+
+      const clearQuery = () => {
+        queryInput.text = ''
+        queryInput.years = { start: null, end: null }
+        queryInput.ratings = []
+        queryInput.genres = []
+      }
+
+      const addMovie = movie => {
+        const el = movieTemplate.content.cloneNode(true)
+        el.querySelector('.title').textContent = movie.title
+        el.querySelector('.genre').textContent = movie.genre
+        el.querySelector('.year').textContent = movie.year
+        el.querySelector('.rating').textContent = movie.rating
+        el.querySelector('.image').src = movie.image
+        el.querySelector('a').href = movie.url
+        movieContainer.appendChild(el)
+      }
+
+      const renderMovies = () => {
+        movieContainer.innerHTML = ''
+        const results = query(queryInput)
+        results.forEach(addMovie)
+      }
+
+      const onToggleClick = e => {
+        const button = e.target
+        const { type, value } = button.dataset
+        if (!type || !value) return
+
+        const index = queryInput[type].indexOf(value)
+        if (index === -1) {
+          queryInput[type].push(value)
+          button.classList.add('active')
+        } else {
+          queryInput[type].splice(index, 1)
+          button.classList.remove('active')
+        }
+
+        movieContainer.innerHTML = ''
+        const results = query(queryInput)
+        results.forEach(addMovie)
+      }
+
+      const addToggleButton = (container, type) => {
+        return value => {
+          const button = document.createElement('button')
+          button.dataset.type = type
+          button.dataset.value = value
+          button.textContent = value
+          button.onclick = onToggleClick
+          container.appendChild(button)
+        }
+      }
+
+      clearButtons.forEach(button => {
+        button.onclick = e => {
+          const { type } = button.dataset
+          if (!type) return
+          queryInput[type] = []
+          const buttons = document.querySelectorAll(`button[data-type="${type}"]`)
+          buttons.forEach(btn => btn.classList.remove('active'))
+          renderMovies()
+        }
+      })
+
+      searchInput.oninput = e => {
+        queryInput.text = e.target.value.trim().toLowerCase()
+        renderMovies()
+      }
+
+      ratings.forEach(addToggleButton(ratingsContainer, 'ratings'))
+      tags.forEach(addToggleButton(tagsContainer, 'tags'))
+
+      renderMovies()
+    </script>
+  </body>
+</html>
