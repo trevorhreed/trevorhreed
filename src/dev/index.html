@@ -1,0 +1,567 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Trevor Reed</title>
+<meta name="description" content="Trevor Reed, software engineer.">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;height:100%;background:#0B0B08}
+a{color:#FFB000;text-decoration:underline}a:hover{color:#0B0B08;background:#FFB000;text-shadow:none}
+#term{position:relative;box-sizing:border-box;width:100%;max-width:820px;height:100vh;height:100dvh;margin:0 auto;background:#0B0B08;color:#FFB000;padding:40px 48px 32px;display:flex;flex-direction:column;gap:14px;font-family:'VT323',monospace;font-size:24px;line-height:28px;overflow:hidden;text-shadow:0 0 6px rgba(255,176,0,0.55)}
+@media (max-width:600px){#term{padding:20px 16px 16px;font-size:20px;line-height:24px}}
+#scan{position:fixed;left:0;top:0;right:0;bottom:0;background-image:repeating-linear-gradient(rgba(0,0,0,0.3) 0px,rgba(0,0,0,0.3) 1px,transparent 1px,transparent 3px);pointer-events:none;z-index:2}
+#bar{background:#FFB000;color:#0B0B08;text-shadow:none;padding:0 12px;display:flex;justify-content:space-between;flex:0 0 auto}
+#out{scrollbar-width:thin;scrollbar-color:#7A5600 #0B0B08;flex:1 1 0;min-height:0;overflow-y:auto;display:flex;flex-direction:column-reverse;gap:16px;padding-right:8px;text-transform:uppercase}
+.ent{display:flex;flex-direction:column}
+.ln{white-space:pre-wrap}
+.big{font-size:52px;line-height:54px;letter-spacing:0.02em}
+.dim{color:#C48600;text-shadow:none}
+#row{display:flex;align-items:center;gap:10px;flex:0 0 auto;border-top:1px solid #7A5600;padding-top:12px}
+#pr{color:#C48600;text-shadow:none;white-space:nowrap}
+#cli{caret-color:#FFB000;flex:1;min-width:0;background:transparent;border:0;outline:none;color:#FFB000;font-family:'VT323',monospace;font-size:26px;line-height:32px;padding:0;text-shadow:0 0 6px rgba(255,176,0,0.55)}
+</style>
+</head>
+<body>
+<div id="term">
+<div id="scan"></div>
+<div id="bar"><div>TREVOR REED SYSTEMS</div><div>BASH</div></div>
+<div id="out"></div>
+<div id="row"><span id="pr"></span><input id="cli" type="text" aria-label="Command" spellcheck="false" autocomplete="off" autocapitalize="off"></div>
+</div>
+<script>
+class DCLogic {
+setState(p) { Object.assign(this.state, p); this.paint(); }
+}
+class Component extends DCLogic {
+constructor(...args) {
+super(...args);
+const L = (t, k) => ({ t: t, k: k || 'n' });
+const F = (arr) => ({ type: 'file', lines: arr.map((x) => (typeof x === 'string' ? L(x) : x)) });
+const D = (children) => ({ type: 'dir', children: children });
+this.L = L;
+const dim = (t) => L(t, 'd');
+const home = D({
+'about.txt': F([
+L('Trevor Reed', 'big'),
+'Software engineer. Web, cloud computing, and architecture.',
+'Full-stack development, team leadership, and modernizing legacy systems.',
+'',
+'Interested in developing innovative software, working with conscientious people, and making the world better.',
+'',
+'Programming since the late 1990s. Professionally since 2006. I love any challenging problem, and I have a passion for improving the way things get done.'
+]),
+'interests.txt': F(['Outside of work: family and friends, movies, games, tennis, floorball, hiking, reading, stimulating conversation, and good food.']),
+'education.txt': F(['B.S., Information Systems', 'Brigham Young University']),
+'contact.txt': F([L('email: ', 'mail'), 'blog:  type blog']),
+'blog': D({
+'0000-00-00-first-post.txt': F(['[Post title]', dim('[Date]'), '', '[Post body.]']),
+'0000-00-00-second-post.txt': F(['[Post title]', dim('[Date]'), '', '[Post body.]'])
+}),
+'leadership.txt': F([
+'Led teams of engineers, typically 4 or 5. Coordinated work, facilitated goal setting, and monitored progress with Kanban boards and control charts. Interviewed and evaluated candidates. Taught patterns, principles, and technologies one-on-one and in groups to develop talent and encourage career growth.',
+'',
+'- Aligned engineers around a new architectural vision to improve site performance and reliability (ControlPad)',
+'- Fostered mentorship between junior and senior engineers (BYU Broadcasting)',
+'- Taught a technical lead the scrum master role and helped him transition into it (Property Solutions)'
+]),
+'experience': D({
+'01-familysearch-2023-present.txt': F([
+'Software Engineer, FamilySearch',
+dim('Mar 2023 - Present'),
+'',
+'Develop backend systems using Java, Spring Boot, and AWS (Beanstalk, Aurora Postgres, S3). Drive technical initiatives to modernize legacy systems while mentoring junior developers and contributing to architectural decisions.',
+'- Navigated stakeholder conflict and designed a solution salvaging months of work',
+'- Streamlined projects with reusable libraries that reduced maintenance time by 75%',
+'- Subject matter expert for multiple systems; mentor 3 junior developers and interns; participate in hiring and architectural planning'
+]),
+'02-uship-2022-2023.txt': F([
+'Team Lead, uShip',
+dim('May 2022 - Mar 2023'),
+'',
+'Led and mentored a team of developers; led architectural planning and decision making; wrote backend, web, and mobile code; worked with cross-functional roles, leadership, and other stakeholders to plan and prioritize upcoming work.'
+]),
+'03-lovelace-institute-2018-2022.txt': F([
+'Entrepreneur, Lovelace Institute (self-employed)',
+dim('Aug 2018 - May 2022'),
+'',
+'Built an online coding school using Google Cloud technologies (serverless, managed Kubernetes, Docker, NoSQL, PubSub, CI/CD, Stripe Payments API). Created automated solutions for environment provisioning, project deployment, secret management, and database backup.'
+]),
+'04-controlpad-2018.txt': F([
+'Principal Architect, ControlPad',
+dim('Jan 2018 - Aug 2018'),
+'',
+'Designed and implemented architecture for an ecommerce platform provider, and provided leadership and mentoring to other developers.',
+'- Reduced project build time from about 5 minutes to under 30 seconds',
+'- Eliminated database failure during peak traffic: from crashing at 500 instantaneous customers to handling 1600+',
+'- Reduced app server load by about 90% and vendor expenses by about 10-20%'
+]),
+'05-byu-broadcasting-2014-2018.txt': F([
+'Team Lead, BYU Broadcasting',
+dim('Dec 2014 - Jan 2018'),
+'',
+'Developed a content and workflow management system supporting the BYUtv website and apps. Led a team of developers. Worked with peer teams to improve process and architecture.',
+'- Reduced time to release from 3-4 weeks to minutes',
+'- Collaborated with the API team to optimize response times by orders of magnitude',
+'- Implemented error monitoring so issues were fixed before end users reported them',
+'- Led the department transition to serverless, microservice architecture'
+]),
+'06-lds-church-2013-2014.txt': F([
+'Senior Software Engineer, The Church of Jesus Christ of Latter-day Saints',
+dim('Jul 2013 - Dec 2014'),
+'',
+'Developed applications with other developers using Java, SQL, AngularJS, Facebook APIs, and more. Led a team of developers. Provided internal consulting on implementation and use of Adobe Experience Manager.'
+]),
+'07-earlier.txt': F([
+'Earlier experience',
+dim('2006 - 2013'),
+'',
+'- Freelance Software Engineer (2012-2013): built website and web app for a non-profit',
+'- Product Manager, Property Solutions (2011-2012): led SaaS projects and multiple offshore development teams; eliminated release issues with a cache-busting strategy',
+'- Software Engineer, Cemaphore Systems (2010-2011): built virtual desktop management software',
+'- Webmaster and Engineering Lead, Brigham Young University (2006-2010): supervised developers, administrators, and support staff; cut webmaster workload by 70% through automation and custom content management systems'
+])
+}),
+'tech': D({
+'languages.txt': F(['JavaScript, TypeScript, C#, Java, Python, PHP, HTML/CSS/Sass', dim('dabbled in: Go, Dart, Rust, C/C++')]),
+'frameworks.txt': F(['NodeJS, Angular, Vue, .NET, Spring, Serverless', dim('dabbled in: React')]),
+'databases.txt': F(['MS SQL, MySQL, Postgres', dim('dabbled in: Mongo')]),
+'patterns.txt': F(['Agile, Scrum, Kanban, CI/CD, GitHub Actions, GitHub Workflow, Docker, microservices, REST', dim('dabbled in: GraphQL')]),
+'aws.txt': F(['Lambda, API Gateway, S3, EC2, CloudWatch, CloudFront, Parameter Store, DynamoDB, RDS, Elastic Beanstalk, Aurora Postgres']),
+'gcp.txt': F(['App Engine, Firestore, Cloud Run, Cloud Storage, Cloud SQL, Cloud Functions, PubSub, Firebase Auth, BigQuery'])
+}),
+'projects': D({
+'broadcasting.txt': F(['BYUtv website and apps', 'Content and workflow management system. Time to release cut from 3-4 weeks to minutes.']),
+'cms.txt': F(['Content management systems', 'Custom CMSs and automation at BYU that cut webmaster workload by about 70%. Adobe Experience Manager consulting at the Church.']),
+'e-commerce.txt': F(['E-commerce platform (ControlPad)', 'Architecture that took the database from failing at 500 simultaneous customers to handling 1600+.']),
+'lovelace-institute.txt': F(['Lovelace Institute, online coding school', 'Serverless Google Cloud platform with Stripe payments, automated provisioning, deployment, and backups.']),
+'call-center.txt': F(['Call center software (MTC, The Church of Jesus Christ of Latter-day Saints)', '[One line on what you built.]']),
+'logistics.txt': F(['Logistics', '[Which role was this? One line on what you built.]'])
+})
+});
+this.root = D({ home: D({ trevor: home }) });
+this.cmds = ['ls', 'cd', 'pwd', 'cat', 'tree', 'head', 'tail', 'less', 'more', 'whoami', 'id', 'hostname', 'uname', 'date', 'uptime', 'echo', 'history', 'clear', 'man', 'help', 'about', 'experience', 'tech', 'projects', 'education', 'blog', 'contact', 'sudo', 'sound', 'exit'];
+this.buttonCmds = ['ls', 'tree', 'about', 'experience', 'tech', 'projects', 'blog', 'contact', 'help', 'clear'];
+this.state = { entries: [], nextId: 1, input: '', past: [], pos: -1, cwd: ['home', 'trevor'] };
+const e1 = this.makeEntry(1, 'cat about.txt', []);
+const e2 = this.makeEntry(2, 'help', ['cat about.txt']);
+this.state = { entries: [e1, e2], nextId: 3, input: '', past: ['cat about.txt', 'help'], pos: -1, cwd: ['home', 'trevor'] };
+
+this.run = (raw) => {
+const text = String(raw || '').trim();
+if (!text) return;
+const past = this.state.past.concat([text]);
+const res = this.exec(text, past);
+if (res.sound !== undefined) this.muted = !res.sound;
+this.sfx('enter');
+this.sfx(this.isErrText(res.lines) ? 'err' : 'ok');
+if (res.clear) {
+this.setState({ entries: [], input: '', past: past, pos: -1 });
+return;
+}
+const entry = { id: this.state.nextId, prompt: this.promptText(this.state.cwd), cmd: text, lines: res.lines };
+this.setState({
+entries: this.state.entries.concat([entry]).slice(-40),
+nextId: this.state.nextId + 1,
+input: '',
+past: past,
+pos: -1,
+cwd: res.cwd || this.state.cwd
+});
+};
+this.onInput = (e) => {
+this.setState({ input: e.target.value, pos: -1 });
+};
+this.onKey = (e) => {
+const key = e.key;
+if (key === 'Tab') this.sfx('tab');
+else if (key !== 'Enter' && !e.ctrlKey && !e.metaKey && !e.altKey && (key.length === 1 || key === 'Backspace' || key === 'Delete')) this.sfx('key');
+if (key === 'Enter') {
+e.preventDefault();
+this.run(this.state.input);
+} else if (key === 'Tab') {
+e.preventDefault();
+this.complete();
+} else if (key === 'ArrowUp') {
+e.preventDefault();
+const past = this.state.past;
+if (!past.length) return;
+const pos = this.state.pos === -1 ? past.length - 1 : Math.max(0, this.state.pos - 1);
+this.setState({ pos: pos, input: past[pos] });
+} else if (key === 'ArrowDown') {
+e.preventDefault();
+const past = this.state.past;
+if (this.state.pos === -1) return;
+const next = this.state.pos + 1;
+if (next >= past.length) this.setState({ pos: -1, input: '' });
+else this.setState({ pos: next, input: past[next] });
+}
+};
+}
+
+sfx(kind) {
+if (this.muted) return;
+try {
+const AC = window.AudioContext || window.webkitAudioContext;
+if (!AC) return;
+if (!this.ac) this.ac = new AC();
+const ac = this.ac;
+if (ac.state === 'suspended') ac.resume();
+const t = ac.currentTime;
+const tone = (type, f0, f1, dur, vol, delay) => {
+const o = ac.createOscillator();
+const g = ac.createGain();
+const s = t + (delay || 0);
+o.type = type;
+o.frequency.setValueAtTime(f0, s);
+if (f1 !== f0) o.frequency.exponentialRampToValueAtTime(f1, s + dur);
+g.gain.setValueAtTime(vol, s);
+g.gain.exponentialRampToValueAtTime(0.0001, s + dur);
+o.connect(g);
+g.connect(ac.destination);
+o.start(s);
+o.stop(s + dur + 0.02);
+};
+if (kind === 'key') {
+const len = Math.floor(ac.sampleRate * 0.018);
+const buf = ac.createBuffer(1, len, ac.sampleRate);
+const d = buf.getChannelData(0);
+for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3);
+const src = ac.createBufferSource();
+const bp = ac.createBiquadFilter();
+const g = ac.createGain();
+bp.type = 'bandpass';
+bp.frequency.value = 1800 + Math.random() * 900;
+g.gain.value = 0.22;
+src.buffer = buf;
+src.connect(bp);
+bp.connect(g);
+g.connect(ac.destination);
+src.start(t);
+} else if (kind === 'enter') {
+tone('sine', 150, 55, 0.09, 0.09, 0);
+tone('square', 900, 700, 0.02, 0.01, 0);
+} else if (kind === 'ok') {
+tone('square', 880, 880, 0.05, 0.012, 0.08);
+} else if (kind === 'err') {
+tone('square', 120, 90, 0.16, 0.025, 0.08);
+} else if (kind === 'tab') {
+tone('square', 1400, 1400, 0.025, 0.01, 0);
+}
+} catch (err) {
+}
+}
+isErrText(lines) {
+return lines.some((l) => /command not found|No such file|Is a directory|Not a directory|missing file|Read-only|sudoers|cannot access|error opening/.test(l.t));
+}
+pathText(cwd) {
+const s = '/' + cwd.join('/');
+if (s === '/home/trevor') return '~';
+if (s.indexOf('/home/trevor/') === 0) return '~' + s.slice(12);
+return s;
+}
+promptText(cwd) {
+return 'trevor@lab:' + this.pathText(cwd) + '$';
+}
+makeEntry(id, text, past) {
+const res = this.exec(text, past.concat([text]));
+return { id: id, prompt: this.promptText(this.state.cwd), cmd: text, lines: res.lines };
+}
+resolve(str, cwdArg) {
+const cwd = cwdArg || this.state.cwd;
+let segs;
+let rest = str;
+if (rest.charAt(0) === '/') {
+segs = [];
+} else if (rest.charAt(0) === '~') {
+segs = ['home', 'trevor'];
+rest = rest.slice(1);
+} else {
+segs = cwd.slice();
+}
+const parts = rest.split('/');
+for (let i = 0; i < parts.length; i++) {
+const p = parts[i];
+if (!p || p === '.') continue;
+if (p === '..') segs.pop();
+else segs.push(p);
+}
+let n = this.root;
+for (let i = 0; i < segs.length; i++) {
+if (n.type !== 'dir' || !n.children[segs[i]]) return null;
+n = n.children[segs[i]];
+}
+return { segs: segs, node: n };
+}
+catDir(node) {
+const L = this.L;
+const out = [];
+Object.keys(node.children).sort().forEach((name) => {
+const c = node.children[name];
+if (c.type !== 'file') return;
+out.push(L('--- ' + name + ' ---', 'd'));
+c.lines.forEach((l) => out.push(l));
+out.push(L(''));
+});
+if (out.length) out.pop();
+return out;
+}
+blogIndex(node) {
+const L = this.L;
+const out = [L('Posts (cat blog/<file> to read)', 'd')];
+Object.keys(node.children).sort().reverse().forEach((name) => {
+out.push(L(name.padEnd(36) + node.children[name].lines[0].t));
+});
+return out;
+}
+treeLines(node, prefix, out, counts) {
+const L = this.L;
+const names = Object.keys(node.children).sort();
+names.forEach((n, i) => {
+const last = i === names.length - 1;
+const child = node.children[n];
+out.push(L(prefix + (last ? '`-- ' : '|-- ') + n));
+if (child.type === 'dir') {
+counts.d++;
+this.treeLines(child, prefix + (last ? '    ' : '|   '), out, counts);
+} else {
+counts.f++;
+}
+});
+}
+complete() {
+const raw = this.state.input;
+const trailing = /\s$/.test(raw);
+const toks = raw.trim().split(/\s+/).filter(Boolean);
+if (!toks.length) return;
+if (toks.length === 1 && !trailing) {
+const hit = this.cmds.find((c) => c.indexOf(toks[0].toLowerCase()) === 0);
+if (hit) this.setState({ input: hit + ' ' });
+return;
+}
+const last = trailing ? '' : toks[toks.length - 1];
+const head = trailing ? toks : toks.slice(0, -1);
+const slash = last.lastIndexOf('/');
+const dirPart = slash >= 0 ? last.slice(0, slash + 1) : '';
+const namePart = slash >= 0 ? last.slice(slash + 1) : last;
+const r = this.resolve(dirPart || '.');
+if (!r || r.node.type !== 'dir') return;
+const names = Object.keys(r.node.children).sort().filter((n) => n.indexOf(namePart) === 0);
+if (!names.length) return;
+const n = names[0];
+const full = dirPart + n + (r.node.children[n].type === 'dir' ? '/' : '');
+this.setState({ input: head.concat([full]).join(' ') });
+}
+exec(text, past) {
+const L = this.L;
+const toks = text.trim().split(/\s+/);
+const cmd = toks[0].toLowerCase();
+const args = toks.slice(1);
+const home = this.resolve('~').node;
+const say = (s) => ({ lines: [L(s)] });
+
+if (cmd === 'clear' || cmd === 'cls') return { lines: [], clear: true };
+
+if (cmd === 'help' || cmd === '?' || cmd === 'commands') {
+const row = (a, b) => L(a.padEnd(13) + b);
+return { lines: [
+row('navigate', 'ls  cd  pwd  tree'),
+row('read', 'cat  head  tail  less  more'),
+row('system', 'whoami  id  hostname  uname  date  uptime'),
+row('shell', 'echo  history  clear  man  sound  exit'),
+row('shortcuts', 'about  experience  tech  projects'),
+row('', 'education  blog  contact')
+] };
+}
+
+if (cmd === 'sound' || cmd === 'mute') {
+const arg = (args[0] || '').toLowerCase();
+const on = cmd === 'mute' ? false : (arg === 'on' ? true : (arg === 'off' ? false : this.muted));
+return { lines: [L('sound: ' + (on ? 'on' : 'off'), 'd'), L('usage: sound on | sound off', 'd')], sound: on };
+}
+if (cmd === 'about') return { lines: home.children['about.txt'].lines };
+if (cmd === 'contact' || cmd === 'mail' || cmd === 'email') return { lines: home.children['contact.txt'].lines };
+if (cmd === 'blog') return { lines: this.blogIndex(home.children['blog']) };
+if (cmd === 'education') return { lines: home.children['education.txt'].lines };
+if (cmd === 'experience' || cmd === 'exp') return { lines: this.catDir(home.children['experience']) };
+if (cmd === 'tech' || cmd === 'tools' || cmd === 'skills' || cmd === 'stack') return { lines: this.catDir(home.children['tech']) };
+if (cmd === 'projects') return { lines: this.catDir(home.children['projects']) };
+
+if (cmd === 'pwd') return say('/' + this.state.cwd.join('/'));
+if (cmd === 'whoami') return say('trevor');
+if (cmd === 'id') return say('uid=1000(trevor) gid=1000(trevor) groups=1000(trevor)');
+if (cmd === 'hostname') return say('lab');
+if (cmd === 'uname') return say(args[0] === '-a' ? 'Linux lab 6.1.0 #1 SMP x86_64 GNU/Linux' : 'Linux');
+if (cmd === 'date') {
+const d = new Date();
+return say(d.toDateString() + ' ' + d.toTimeString().slice(0, 8));
+}
+if (cmd === 'uptime') return say('up since the late 1990s, 1 user, load average: conscientious');
+if (cmd === 'echo') {
+const s = args.join(' ').replace(/\$USER/g, 'trevor').replace(/\$HOME/g, '/home/trevor').replace(/\$HOSTNAME/g, 'lab').replace(/\$PWD/g, '/' + this.state.cwd.join('/'));
+return say(s);
+}
+if (cmd === 'history') {
+return { lines: past.map((c, i) => L(String(i + 1).padStart(4) + '  ' + c)) };
+}
+if (cmd === 'man') {
+if (!args.length) return say('What manual page do you want?');
+if (args[0] !== 'trevor') return say('No manual entry for ' + args[0]);
+return { lines: [
+L('TREVOR(1)                   User Commands                   TREVOR(1)', 'd'),
+L(''),
+L('NAME'),
+L('       trevor - software engineer: web, cloud, architecture'),
+L(''),
+L('DESCRIPTION'),
+L('       Full-stack development, team leadership, and modernizing legacy systems. Interested in developing innovative software, working with conscientious people, and making the world better.'),
+L(''),
+L('SEE ALSO'),
+L('       cat about.txt, tree, ls experience, cat contact.txt'),
+L(''),
+L('AUTHOR'),
+L('       Trevor Reed <contact@trevorhreed.com>')
+] };
+}
+if (cmd === 'sudo') return say('trevor is not in the sudoers file. This incident will be reported.');
+if (cmd === 'exit' || cmd === 'logout') return say('logout: this session has no exit. Try: contact');
+if (['rm', 'mv', 'cp', 'mkdir', 'rmdir', 'touch', 'chmod', 'chown', 'ln'].indexOf(cmd) >= 0) return say(cmd + ': Read-only file system');
+
+if (cmd === 'cd') {
+const t = args[0] || '~';
+const r = this.resolve(t);
+if (!r) return say('cd: ' + t + ': No such file or directory');
+if (r.node.type !== 'dir') return say('cd: ' + t + ': Not a directory');
+return { lines: [], cwd: r.segs };
+}
+
+if (cmd === 'ls') {
+const flags = args.filter((a) => a.charAt(0) === '-').join('');
+const targets = args.filter((a) => a.charAt(0) !== '-');
+const long = flags.indexOf('l') >= 0;
+const all = flags.indexOf('a') >= 0;
+const list = targets.length ? targets : ['.'];
+const out = [];
+list.forEach((t, idx) => {
+const r = this.resolve(t);
+if (!r) {
+out.push(L("ls: cannot access '" + t + "': No such file or directory"));
+return;
+}
+if (list.length > 1) {
+if (idx > 0) out.push(L(''));
+out.push(L(t + ':'));
+}
+if (r.node.type === 'file') {
+out.push(L(t));
+return;
+}
+const names = Object.keys(r.node.children).sort();
+let items = names.map((n) => ({ n: n + (r.node.children[n].type === 'dir' ? '/' : ''), d: r.node.children[n].type === 'dir' }));
+if (all) items = [{ n: './', d: true }, { n: '../', d: true }].concat(items);
+if (long) {
+items.forEach((it) => out.push(L((it.d ? 'drwxr-xr-x  ' : '-rw-r--r--  ') + it.n)));
+} else if (items.length) {
+out.push(L(items.map((it) => it.n).join('  ')));
+}
+});
+return { lines: out };
+}
+
+if (cmd === 'cat' || cmd === 'head' || cmd === 'tail' || cmd === 'less' || cmd === 'more') {
+const files = args.filter((a) => a.charAt(0) !== '-');
+if (!files.length) return say(cmd + ': missing file operand');
+const out = [];
+files.forEach((t) => {
+const r = this.resolve(t);
+if (!r) out.push(L(cmd + ': ' + t + ': No such file or directory'));
+else if (r.node.type === 'dir') out.push(L(cmd + ': ' + t + ': Is a directory'));
+else r.node.lines.forEach((l) => out.push(l));
+});
+return { lines: out };
+}
+
+if (cmd === 'tree') {
+const t = args[0] || '.';
+const r = this.resolve(t);
+if (!r) return say(t + ' [error opening dir]');
+if (r.node.type === 'file') return say(t);
+const out = [L(t)];
+const counts = { d: 0, f: 0 };
+this.treeLines(r.node, '', out, counts);
+out.push(L(''));
+out.push(L(counts.d + ' directories, ' + counts.f + ' files', 'd'));
+return { lines: out };
+}
+
+return say('bash: ' + toks[0] + ': command not found');
+}
+
+renderVals() {
+const entries = this.state.entries.slice().reverse().map((x) => ({
+id: x.id,
+prompt: x.prompt,
+cmd: x.cmd,
+lines: x.lines.map((l) => ({
+t: l.t === '' ? ' ' : l.t,
+isBig: l.k === 'big',
+isDim: l.k === 'd',
+isMail: l.k === 'mail',
+isNorm: l.k === 'n'
+}))
+}));
+return {
+entries: entries,
+isEmpty: entries.length === 0,
+promptText: this.promptText(this.state.cwd),
+input: this.state.input,
+onInput: this.onInput,
+onKey: this.onKey
+};
+}
+}
+
+Component.prototype.paint = function () {
+const v = this.renderVals();
+const out = document.getElementById('out');
+out.textContent = '';
+v.entries.forEach((e) => {
+const box = document.createElement('div');
+box.className = 'ent';
+const c = document.createElement('div');
+c.className = 'ln';
+const p = document.createElement('span');
+p.className = 'dim';
+p.textContent = e.prompt;
+c.appendChild(p);
+c.appendChild(document.createTextNode(' ' + e.cmd));
+box.appendChild(c);
+e.lines.forEach((l) => {
+const d = document.createElement('div');
+d.className = 'ln' + (l.isBig ? ' big' : '') + (l.isDim ? ' dim' : '');
+d.appendChild(document.createTextNode(l.t));
+if (l.isMail) {
+const a = document.createElement('a');
+a.href = 'mailto:contact@trevorhreed.com';
+a.textContent = 'contact@trevorhreed.com';
+d.appendChild(a);
+}
+box.appendChild(d);
+});
+out.appendChild(box);
+});
+document.getElementById('pr').textContent = v.promptText;
+const inp = document.getElementById('cli');
+if (inp.value !== v.input) inp.value = v.input;
+};
+const app = new Component();
+const inp = document.getElementById('cli');
+inp.addEventListener('input', app.onInput);
+inp.addEventListener('keydown', app.onKey);
+document.getElementById('term').addEventListener('click', () => inp.focus());
+app.paint();
+inp.focus();
+</script>
+</body>
+</html>
