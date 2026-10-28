@@ -16,7 +16,7 @@
     "js-yaml": "^4.1.0",
     "minimatch": "^10.0.0",
     "sass": "^1.77.0",
-    "sharp": "^0.33.0",
+    "sharp": "^0.35.5",
     "vite": "^6.0.0"
   },
   "repository": {
