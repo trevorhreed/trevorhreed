@@ -37,7 +37,6 @@ src/
     script.js            # Homepage client-side routing
     pid/                 # PID generator tool
     youtube/             # Movie search app
-    tabs/me/             # Personal browser new-tab page (petite-vue, seasonal backgrounds)
     dev/                 # Interactive terminal page
 plugins/                 # Custom Vite plugins
   image-resize.js        # Reads images.config.yaml, resizes with sharp → dist/images/
@@ -86,5 +85,4 @@ data:
 - Node >= 20 required
 - The `[hide]` attribute in HTML hides elements via CSS
 - Custom `[link]` attribute drives hash-based navigation on the homepage
-- The tab page uses petite-vue (CDN import) and seasonal background images
 - Generated images and data are emitted directly to `dist/` at build time (not staged through `src/public/`)
