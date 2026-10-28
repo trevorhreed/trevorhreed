@@ -1,18 +1,23 @@
 {
   "name": "trevorhreed",
-  "version": "1.0.0",
+  "version": "2.0.0",
+  "type": "module",
   "description": "A personal website",
   "engines": {
-    "node": "20"
-  },
-  "directories": {
-    "doc": "docs"
+    "node": ">=20"
   },
   "scripts": {
-    "start": "npm run watch & npm run serve",
-    "serve": "npx serve docs -l 3000",
-    "build": "npx --yes @yesiree/htmlc@0.0.12 -m -c -o '**/*.{json,jpg,png,svg}' -s src -d trevorhreed.com",
-    "watch": "npx @yesiree/htmlc@0.0.12 -s src -d trevorhreed.com -w"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "glob": "^11.0.0",
+    "js-yaml": "^4.1.0",
+    "minimatch": "^10.0.0",
+    "sass": "^1.77.0",
+    "sharp": "^0.33.0",
+    "vite": "^6.0.0"
   },
   "repository": {
     "type": "git",
