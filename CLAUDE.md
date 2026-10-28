@@ -18,8 +18,7 @@ No tests or linter configured.
 
 - Branch `release` is the main branch
 - trevorhreed.com is now served by the trevorhreed/trevorhreed.com Cloudflare Worker; this repo no longer deploys anywhere and GitHub Pages is off
-- Pushing to `release` runs GitHub Actions: `npm ci` → `npm run build`, as a build check only
-- PR workflow runs the same build as a check
+- PRs to `release` run `npm ci` → `npm run build` as a check; nothing runs on push
 
 ## Project Structure
 
