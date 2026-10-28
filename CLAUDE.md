@@ -16,9 +16,9 @@ No tests or linter configured.
 
 ## Deployment
 
-- Branch `release` is the main/deploy branch
-- Pushing to `release` triggers GitHub Actions: `npm ci` → `npm run build` → deploys `dist/` to GitHub Pages
-- PR workflow runs the same build as a check
+- Branch `release` is the main branch
+- trevorhreed.com is now served by the trevorhreed/trevorhreed.com Cloudflare Worker; this repo no longer deploys anywhere and GitHub Pages is off
+- PRs to `release` run `npm ci` → `npm run build` as a check; nothing runs on push
 
 ## Project Structure
 
